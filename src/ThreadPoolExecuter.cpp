@@ -1,10 +1,13 @@
+#include <vector>
+#include <thread>
+#include <queue>
+#include <functional>
+#include <mutex>
+#include <condition_variable>
+#include <future>
+#include <stdexcept>
+
 class ThreadPoolExecuter {
-    // Need
-    // enque -> jopbs
-    // mutex for those enque
-    // vector of threads (threads container)
-
-
     private:
         std::vector<std::thread> workers;   // worker thread 
         std::queue<std::function<void()>> task;  // a lemda function of task in queue
@@ -19,6 +22,10 @@ class ThreadPoolExecuter {
         void shutdown();
 };
 
+/**
+ * @brief Constructs a ThreadPoolExecuter with the given number of threads.
+ * @param numOfThread Number of worker threads to create.
+ */
 ThreadPoolExecuter :: ThreadPoolExecuter(int numOfThread) : stop(false){
     for(int i = 0; i < numOfThread; i++){
         workers.emplace_back([this]{
@@ -53,6 +60,9 @@ ThreadPoolExecuter :: ThreadPoolExecuter(int numOfThread) : stop(false){
     }
 }
 
+/**
+ * @brief Shuts down the thread pool and joins all worker threads.
+ */
 void ThreadPoolExecuter :: shutdown(){
     {
         // Lock the queue mutex and set the stop flag to true to signal all threads to stop.
@@ -61,7 +71,7 @@ void ThreadPoolExecuter :: shutdown(){
     }
 
     // Notify all worker threads to check the stop condition again.
-    queueConditon.notify_all();
+    queueCondition.notify_all();
     
     // Join all worker threads to free their resources.
     for(std::thread& worker:workers){
@@ -71,10 +81,40 @@ void ThreadPoolExecuter :: shutdown(){
     }
 }
 
-
-// Implemented ThreadPoolDestructor
+/**
+ * @brief Destructor for ThreadPoolExecuter. Shuts down the thread pool.
+ */
 ThreadPoolExecuter :: ~ThreadPoolExecuter(){
     shutdown();
 }
 
+/**
+ * @brief Enqueues a task into the thread pool and returns a future to retrieve the result.
+ * @tparam F Callable type.
+ * @tparam Args Argument types.
+ * @param f Callable to execute.
+ * @param args Arguments to pass to the callable.
+ * @return std::future<typename std::invoke_result_t<F, Args...>> Future to retrieve the result.
+ */
+template<class F, class... Args>
+auto ThreadPoolExecuter::enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result_t<F, Args...>> {
+    using returnType = typename std::invoke_result_t<F, Args...>;
+
+    auto taskPtr = std::make_shared<std::packaged_task<returnType()>>(
+        std::bind(std::forward<F>(f), std::forward<Args>(args)...)
+    );
+
+    std::future<returnType> result = taskPtr->get_future();
+
+    {
+        std::unique_lock<std::mutex> lock(queueMutex);
+        if (stop) {
+            throw std::runtime_error("Cannot submit tasks to a stopped ThreadPoolExecuter");
+        }
+        task.emplace([taskPtr]() { (*taskPtr)(); });
+    }
+
+    queueCondition.notify_one();
+    return result;
+}
 
