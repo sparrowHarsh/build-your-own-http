@@ -71,6 +71,8 @@ void ThreadPoolExecuter :: shutdown(){
     }
 }
 
+
+// Implemented ThreadPoolDestructor
 ThreadPoolExecuter :: ~ThreadPoolExecuter(){
     shutdown();
 }
