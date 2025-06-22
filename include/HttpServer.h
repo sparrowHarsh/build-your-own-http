@@ -20,7 +20,7 @@ class HttpServer {
 
     public:
         HttpServer(int port);
-        ~HttpServer();
+        // ~HttpServer();
         bool start();
         void stop();
         int getPort(); 

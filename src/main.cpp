@@ -1,4 +1,3 @@
-#pragma once
 #include "../include/HttpServer.h"
 
 int main(){
