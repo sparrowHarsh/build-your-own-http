@@ -33,6 +33,15 @@ int main() {
 
     std::cout << "Message sent to server: " << message << std::endl;
 
+    // Receive response from server
+    char buffer[4096] = {0};
+    int bytesReceived = recv(sock, buffer, sizeof(buffer) - 1, 0);
+    if (bytesReceived > 0) {
+        std::cout << "Received from server: " << buffer << std::endl;
+    } else {
+        std::cout << "No response received from server." << std::endl;
+    }
+
     close(sock);
     return 0;
 }
