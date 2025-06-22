@@ -21,6 +21,9 @@ class ThreadPoolExecuter {
         ThreadPoolExecuter(int numOfThread);
         ~ThreadPoolExecuter();
         void shutdown();
+
+        template<class F, class... Args>
+        auto enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result_t<F, Args...>>;
 };
 
 /**
