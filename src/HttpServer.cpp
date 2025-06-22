@@ -58,23 +58,29 @@ void HttpServer::accept_connections() {
 
     while(isRunning){
         int clientSocket = accept(serverSocket, (struct sockaddr*)&clientAddress, &clientAddressLen);
+
+        std::cout<<"accepted connection from client"<<std::endl;
         if(clientSocket < 0){
             std::cout << "Error on accept: " << strerror(errno) << std::endl;
             continue;
         }
 
-        // Assuming you have a threadpool instance named threadpool
-        // and enqueue is the correct method name
+        // Check if threadpool is running and enqueue is working
+        std::cout << "Enqueuing client socket " << clientSocket << " to threadpool" << std::endl;
+        
         threadpool.enqueue([this, clientSocket](){
+            std::cout << "Thread picked up client socket " << clientSocket << std::endl;
             this->handleConnections(clientSocket);
         });
+
     }
 }
 
 void HttpServer::handleConnections(int clientSocket){
     char buffer[4096] = {0};
     int readBytes = read(clientSocket, buffer, sizeof(buffer)-1);
-
+    
+    std::cout<<"redBytes executed successfully"<<std::endl;
     if(readBytes < 0){
         std::cerr << "Error while reading from socket: " << strerror(errno) << std::endl;
         close(clientSocket);
@@ -83,6 +89,12 @@ void HttpServer::handleConnections(int clientSocket){
     // Handle the request here...
 
     std::cout<<"Received message from clinet : "<<buffer<<std::endl;
+
+    const char* response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 24\r\n\r\nMessage has been received";
+    ssize_t sentBytes = write(clientSocket, response, strlen(response));
+    if (sentBytes < 0) {
+        std::cerr << "Error while writing to socket: " << strerror(errno) << std::endl;
+    }
 
     close(clientSocket);
 }

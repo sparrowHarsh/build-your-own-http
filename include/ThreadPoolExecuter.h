@@ -60,6 +60,8 @@ inline ThreadPoolExecuter :: ThreadPoolExecuter(int numOfThread) : stop(false){
                     task = std::move(this->task.front());
                     this->task.pop();
                 }
+
+                task();
             }
         });
     }
@@ -102,7 +104,7 @@ inline ThreadPoolExecuter :: ~ThreadPoolExecuter(){
  * @return std::future<typename std::invoke_result_t<F, Args...>> Future to retrieve the result.
  */
 template<class F, class... Args>
-auto ThreadPoolExecuter::enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result_t<F, Args...>> {
+inline auto ThreadPoolExecuter::enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result_t<F, Args...>> {
     using returnType = typename std::invoke_result_t<F, Args...>;
 
     auto taskPtr = std::make_shared<std::packaged_task<returnType()>>(
