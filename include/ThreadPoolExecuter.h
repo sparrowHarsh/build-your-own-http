@@ -31,7 +31,7 @@ class ThreadPoolExecuter {
  * @brief Constructs a ThreadPoolExecuter with the given number of threads.
  * @param numOfThread Number of worker threads to create.
  */
-ThreadPoolExecuter :: ThreadPoolExecuter(int numOfThread) : stop(false){
+inline ThreadPoolExecuter :: ThreadPoolExecuter(int numOfThread) : stop(false){
     for(int i = 0; i < numOfThread; i++){
         workers.emplace_back([this]{
             // Create and add a new worker thread to the workers vector.
@@ -68,7 +68,7 @@ ThreadPoolExecuter :: ThreadPoolExecuter(int numOfThread) : stop(false){
 /**
  * @brief Shuts down the thread pool and joins all worker threads.
  */
-void ThreadPoolExecuter :: shutdown(){
+inline void ThreadPoolExecuter :: shutdown(){
     {
         // Lock the queue mutex and set the stop flag to true to signal all threads to stop.
         std::unique_lock<std::mutex> lock(this->queueMutex);
@@ -89,7 +89,7 @@ void ThreadPoolExecuter :: shutdown(){
 /**
  * @brief Destructor for ThreadPoolExecuter. Shuts down the thread pool.
  */
-ThreadPoolExecuter :: ~ThreadPoolExecuter(){
+inline ThreadPoolExecuter :: ~ThreadPoolExecuter(){
     shutdown();
 }
 
