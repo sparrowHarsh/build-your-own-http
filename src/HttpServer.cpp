@@ -6,30 +6,8 @@
 #include <netinet/in.h>
 #include <cstring>
 #include <cerrno>
-#include "ThreadPoolExecuter.cpp"
-
-
-class HttpServer {
-    private:
-        int port;
-        int serverSocket;
-        bool isRunning;
-        ThreadPoolExecuter threadpool;
-
-
-    public:
-        HttpServer(int port);
-        ~HttpServer();
-        bool start();
-        void stop();
-        int getPort(); 
-
-        void accept_connections();
-        void handleConnections(int clientSocket);
-        void sendResponse(int clientSocket, const std::string& response);
-        // void registerHandler(const HttpMethod method, const std::string& path, RequestHandler* handler);
-};
-
+#include "../include/ThreadPoolExecuter.h"
+#include "../include/HttpServer.h"
 
 HttpServer::HttpServer(int port) : port(port), serverSocket(-1), isRunning(false), threadpool(4) {
     std::cout << "HttpServer created on port " << port << std::endl;
