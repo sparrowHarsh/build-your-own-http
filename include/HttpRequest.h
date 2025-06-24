@@ -2,6 +2,7 @@
 
 #include <string>
 #include <map>
+#include <sstream>
 
 class HttpRequest{
     private:
@@ -12,7 +13,7 @@ class HttpRequest{
         std::map<std::string,std::string> pathParams;
         std::string body;
         void parseHeaders(std::istringstream& requestStream);
-        void parseMethod(std::string methodStr);
+        void parseMethod(const std::string& methodStr);
         void parseBody(std::istringstream& requestStream);
 
     public:

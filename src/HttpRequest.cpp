@@ -1,5 +1,5 @@
 #include "../include/HttpRequest.h"
-
+#include <sstream>
 
 HttpRequest :: HttpRequest (){
 
@@ -46,7 +46,7 @@ void HttpRequest::parseHeaders(std::istringstream& stream){
 }
 
 void HttpRequest::parseBody(std::istringstream& requestLine){
-    if (method == HttpMethod::POST || method == HttpMethod::PUT) {
+    if (method == "POST" || method == "PUT") {
         // Read the entire remaining content as body
         std::stringstream body_stream;
         body_stream << requestLine.rdbuf();
