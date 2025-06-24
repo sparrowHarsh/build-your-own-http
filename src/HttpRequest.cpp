@@ -56,15 +56,15 @@ void HttpRequest::parseBody(std::istringstream& requestLine){
 
 void HttpRequest::parseMethod(const std::string& methodStr) {
     if (methodStr == "GET") {
-        method = HttpMethod::GET;
+        method = "GET";
     } else if (methodStr == "POST") {
-        method = HttpMethod::POST;
+        method ="POST";
     } else if (methodStr == "PUT") {
-        method = HttpMethod::PUT;
+        method = "PUT";
     } else if (methodStr == "DELETE") {
-        method = HttpMethod::DELETE;
+        method = "DELETE";
     } else {
-        method = HttpMethod::UNKNOWN;
+        method = "UNKNOWN";
     }
 }
 
