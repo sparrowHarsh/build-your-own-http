@@ -6,14 +6,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <thread>
-#include <vector>
 
-void run_client(int client_id) {
+int main() {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
-        std::cerr << "[Client " << client_id << "] Socket creation error\n";
-        return;
+        std::cerr << "Socket creation error\n";
+        return 1;
     }
 
     struct sockaddr_in serv_addr;
@@ -21,41 +19,25 @@ void run_client(int client_id) {
     serv_addr.sin_port = htons(8080);
 
     if (inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) <= 0) {
-        std::cerr << "[Client " << client_id << "] Invalid address/ Address not supported\n";
-        close(sock);
-        return;
+        std::cerr << "Invalid address/ Address not supported\n";
+        return 1;
     }
 
     if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
-        std::cerr << "[Client " << client_id << "] Connection Failed\n";
-        close(sock);
-        return;
+        std::cerr << "Connection Failed\n";
+        return 1;
     }
 
-    std::string message = "Hello from client " + std::to_string(client_id) + "!";
-    send(sock, message.c_str(), message.size(), 0);
-
-    std::cout << "[Client " << client_id << "] Message sent to server: " << message << std::endl;
+    // Example: send a GET request to /hello
+    std::string request = "GET /hello HTTP/1.1\r\nHost: localhost\r\n\r\n";
+    send(sock, request.c_str(), request.size(), 0);
 
     char buffer[4096] = {0};
     int bytesReceived = recv(sock, buffer, sizeof(buffer) - 1, 0);
     if (bytesReceived > 0) {
-        std::cout << "[Client " << client_id << "] Received from server: " << buffer << std::endl;
-    } else {
-        std::cout << "[Client " << client_id << "] No response received from server." << std::endl;
+        std::cout << "Received from server:\n" << buffer << std::endl;
     }
 
     close(sock);
-}
-
-int main() {
-    int num_clients = 5; // Number of clients to simulate
-    std::vector<std::thread> threads;
-    for (int i = 1; i <= num_clients; ++i) {
-        threads.emplace_back(run_client, i);
-    }
-    for (auto& t : threads) {
-        t.join();
-    }
     return 0;
 }
