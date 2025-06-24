@@ -79,19 +79,39 @@ void HttpServer::accept_connections() {
 void HttpServer::handleConnections(int clientSocket){
     char buffer[4096] = {0};
     int readBytes = read(clientSocket, buffer, sizeof(buffer)-1);
-    
-    std::cout<<"redBytes executed successfully"<<std::endl;
+
     if(readBytes < 0){
         std::cerr << "Error while reading from socket: " << strerror(errno) << std::endl;
         close(clientSocket);
         return;
     }
-    // Handle the request here...
 
-    std::cout<<"Received message from clinet : "<<buffer<<std::endl;
+    // Parse the HTTP request
+    HttpRequest request;
+    if (!request.parse(buffer)) {
+        std::cerr << "Failed to parse HTTP request" << std::endl;
+        close(clientSocket);
+        return;
+    }
 
-    const char* response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 24\r\n\r\nMessage has been received";
-    ssize_t sentBytes = write(clientSocket, response, strlen(response));
+    // Routing logic
+    HttpResponse response;
+    response.setHeader("Content-Type", "text/plain");
+
+    if (request.getPath() == "/hello" && request.getMethod() == "GET") {
+        response.setStatus(200, "OK");
+        response.setBody("Hello, world!");
+    } else if (request.getPath() == "/goodbye" && request.getMethod() == "GET") {
+        response.setStatus(200, "OK");
+        response.setBody("Goodbye!");
+    } else {
+        response.setStatus(404, "Not Found");
+        response.setBody("Route not found");
+    }
+
+    // Send the response
+    std::string responseStr = response.toString();
+    ssize_t sentBytes = write(clientSocket, responseStr.c_str(), responseStr.size());
     if (sentBytes < 0) {
         std::cerr << "Error while writing to socket: " << strerror(errno) << std::endl;
     }
