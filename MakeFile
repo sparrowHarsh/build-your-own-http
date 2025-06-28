@@ -14,21 +14,21 @@ CLIENT = $(BIN_DIR)/client
 all: dirs $(TARGET) $(CLIENT)
 
 dirs:
-    @mkdir -p $(OBJ_DIR)
-    @mkdir -p $(BIN_DIR)
+        @mkdir -p $(OBJ_DIR)
+        @mkdir -p $(BIN_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-    $(CXX) $(CXXFLAGS) -c $< -o $@
+        $(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(TARGET): $(filter-out $(OBJ_DIR)/Client.o,$(OBJS))
-    $(CXX) $(CXXFLAGS) $^ -o $@
+        $(CXX) $(CXXFLAGS) $^ -o $@
 
 $(CLIENT): $(OBJ_DIR)/Client.o
-    $(CXX) $(CXXFLAGS) $^ -o $@
+        $(CXX) $(CXXFLAGS) $^ -o $@
 
 clean:
-    rm -f $(OBJ_DIR)/*.o
-    rm -f $(BIN_DIR)/httpserver
-    rm -f $(BIN_DIR)/client
+        rm -f $(OBJ_DIR)/*.o
+        rm -f $(BIN_DIR)/httpserver
+        rm -f $(BIN_DIR)/client
 
 .PHONY: all clean dirs

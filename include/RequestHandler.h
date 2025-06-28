@@ -1,4 +1,8 @@
+#pragma once
 
+// Forward declarations to avoid circular dependencies
+class HttpRequest;
+class HttpResponse;
 
 class RequestHandler {
     public:
