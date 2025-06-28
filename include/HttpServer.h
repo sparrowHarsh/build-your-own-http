@@ -8,6 +8,7 @@
 #include <cstring>
 #include <cerrno>
 #include "ThreadPoolExecuter.h"
+#include  "RouteInfo.h"
 
 
 class HttpServer {
@@ -17,6 +18,12 @@ class HttpServer {
         bool isRunning;
         ThreadPoolExecuter threadpool;
 
+        vector<RouteInfo> routes;
+        RequestHandler* badRequestHandler;
+        RequestHandler* resourceNotFoundHandler;
+        RequestHandler* methodNotFoundHandler;
+
+        RequestHandler* findHandler(HttpRequest& httpRequest);
 
     public:
         HttpServer(int port);
@@ -28,5 +35,5 @@ class HttpServer {
         void accept_connections();
         void handleConnections(int clientSocket);
         void sendResponse(int clientSocket, const std::string& response);
-        // void registerHandler(const HttpMethod method, const std::string& path, RequestHandler* handler);
+        void registerHandler(const HttpMethod method, const std::string& path, RequestHandler* handler);
 };

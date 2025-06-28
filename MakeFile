@@ -1,0 +1,34 @@
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Iinclude -pthread
+
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
+
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS))
+
+TARGET = $(BIN_DIR)/httpserver
+CLIENT = $(BIN_DIR)/client
+
+all: dirs $(TARGET) $(CLIENT)
+
+dirs:
+    @mkdir -p $(OBJ_DIR)
+    @mkdir -p $(BIN_DIR)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+    $(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(TARGET): $(filter-out $(OBJ_DIR)/Client.o,$(OBJS))
+    $(CXX) $(CXXFLAGS) $^ -o $@
+
+$(CLIENT): $(OBJ_DIR)/Client.o
+    $(CXX) $(CXXFLAGS) $^ -o $@
+
+clean:
+    rm -f $(OBJ_DIR)/*.o
+    rm -f $(BIN_DIR)/httpserver
+    rm -f $(BIN_DIR)/client
+
+.PHONY: all clean dirs

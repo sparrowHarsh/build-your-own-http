@@ -15,6 +15,40 @@ HttpServer::HttpServer(int port) : port(port), serverSocket(-1), isRunning(false
     std::cout << "HttpServer created on port " << port << std::endl;
 }
 
+void HttpServer::registerHandler(const HttpMethod method, const std::string& requestURI, RequestHandler* handler) {
+    RouteInfo route;
+
+    std::string pattern = "^";
+    size_t start = 0, colon = -1;
+
+    while ((colon = requestURI.find(':', start)) != std::string::npos) {
+        pattern += requestURI.substr(start, colon - start);
+        
+        size_t paramEnd = requestURI.find('/', colon);
+        if (paramEnd == std::string::npos) {
+            paramEnd = requestURI.length();
+        }
+
+        std::string paramName = requestURI.substr(colon + 1, paramEnd - colon -1);
+        route.paramNames.push_back(paramName);
+
+        pattern += "([^/]+)";
+        start = paramEnd;
+    }
+    
+    pattern += requestURI.substr(start) + "$";
+
+    size_t asterisk;
+    while ((asterisk = pattern.find('*')) != std::string::npos) {
+        pattern.replace(asterisk, 1, ".*");
+    }
+    
+    route.method = method;
+    route.pattern = std::regex(pattern);
+    route.handler = std::move(handler);
+    routes.push_back(route);
+}
+
 bool HttpServer::start() {
     serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket < 0) {
@@ -119,4 +153,28 @@ void HttpServer::handleConnections(int clientSocket){
     }
 
     close(clientSocket);
+}
+
+
+RequestHandler* HttpServer::findHandler(HttpRequest& httpRequest) {
+    std::string path = httpRequest.getPath();
+    
+    bool patternMatchingHandlerExists = false;
+
+    for (const auto& route : routes) {
+        std::smatch matches;
+        if (std::regex_match(path, matches, route.pattern)) {
+            patternMatchingHandlerExists = true;
+
+            for (size_t i = 0 ; i < route.paramNames.size() && i + 1 < matches.size(); ++i) {
+                httpRequest.setPathParam(route.paramNames[i], matches[i + 1].str());
+            }
+            
+            if (route.method == httpRequest.getMethod()) {
+                return route.handler;
+            }
+        }
+    }
+
+    return (patternMatchingHandlerExists) ? methodNotFoundHandler : resourceNotFoundHandler;
 }
