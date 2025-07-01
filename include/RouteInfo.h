@@ -6,7 +6,7 @@
 #include "RequestHandler.h"
 
 struct RouteInfo {
-    string method;
+    std::string method;
     std::regex pattern;
     RequestHandler* handler;
     std::vector<std::string> paramNames;

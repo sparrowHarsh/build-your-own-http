@@ -9,6 +9,7 @@
 #include <cerrno>
 #include "ThreadPoolExecuter.h"
 #include  "RouteInfo.h"
+#include "HttpMethod.h" // Add this line if HttpMethod is defined in HttpMethod.h
 
 
 class HttpServer {
@@ -18,7 +19,7 @@ class HttpServer {
         bool isRunning;
         ThreadPoolExecuter threadpool;
 
-        vector<RouteInfo> routes;
+        std::vector<RouteInfo> routes;
         RequestHandler* badRequestHandler;
         RequestHandler* resourceNotFoundHandler;
         RequestHandler* methodNotFoundHandler;

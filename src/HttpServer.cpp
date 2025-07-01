@@ -10,12 +10,13 @@
 #include "../include/HttpServer.h"
 #include "../include/HttpRequest.h"
 #include "../include/HttpResponse.h"
+#include "../include/HttpMethod.h"
 
 HttpServer::HttpServer(int port) : port(port), serverSocket(-1), isRunning(false), threadpool(4) {
     std::cout << "HttpServer created on port " << port << std::endl;
 }
 
-void HttpServer::registerHandler(const HttpMethod method, const std::string& requestURI, RequestHandler* handler) {
+void HttpServer::registerHandler(std::string& method, const std::string& requestURI, RequestHandler* handler) {
     RouteInfo route;
 
     std::string pattern = "^";
