@@ -1,6 +1,5 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Iinclude -pthread
-
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
@@ -32,3 +31,4 @@ clean:
         rm -f $(BIN_DIR)/client
 
 .PHONY: all clean dirs
+
