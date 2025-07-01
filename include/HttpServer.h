@@ -9,7 +9,6 @@
 #include <cerrno>
 #include "ThreadPoolExecuter.h"
 #include  "RouteInfo.h"
-#include "HttpMethod.h" // Add this line if HttpMethod is defined in HttpMethod.h
 
 
 class HttpServer {
@@ -36,5 +35,5 @@ class HttpServer {
         void accept_connections();
         void handleConnections(int clientSocket);
         void sendResponse(int clientSocket, const std::string& response);
-        void registerHandler(const HttpMethod method, const std::string& path, RequestHandler* handler);
+        void registerHandler(std::string& method, const std::string& path, RequestHandler* handler);
 };
