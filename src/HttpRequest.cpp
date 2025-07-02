@@ -9,6 +9,26 @@ std::string HttpRequest::getMethod(){
     return method;
 }
 
+bool HttpRequest::parse(const std::string& rawRequest) {
+    std::istringstream stream(rawRequest);
+
+    // Parse request line
+    std::string requestLine;
+    if (!std::getline(stream, requestLine) || requestLine.empty()) return false;
+    if (requestLine.back() == '\r') requestLine.pop_back();
+
+    std::istringstream reqLineStream(requestLine);
+    reqLineStream >> method >> path >> version;
+
+    // Parse headers
+    parseHeaders(stream);
+
+    // Parse body
+    parseBody(stream);
+
+    return true;
+}
+
 std::string HttpRequest::getVersion(){
     return version;
 }

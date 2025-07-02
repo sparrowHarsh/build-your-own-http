@@ -3,7 +3,7 @@
 #include <map>
 
 
-HttpResponse::HttpResponse(){
+HttpResponse::HttpResponse() : httpVersion("HTTP/1.1"), statusCode(200), statusMessage("OK") {
 
 }
 
