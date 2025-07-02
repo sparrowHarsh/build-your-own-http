@@ -131,15 +131,11 @@ void HttpServer::handleConnections(int clientSocket){
     }
 
     // Routing logic
+   // Use registered handler for routing
     HttpResponse response;
-    response.setHeader("Content-Type", "text/plain");
-
-    if (request.getPath() == "/hello" && request.getMethod() == "GET") {
-        response.setStatus(200, "OK");
-        response.setBody("Hello, world!");
-    } else if (request.getPath() == "/goodbye" && request.getMethod() == "GET") {
-        response.setStatus(200, "OK");
-        response.setBody("Goodbye!");
+    RequestHandler* handler = findHandler(request);
+    if (handler) {
+        handler->handle(request, response);
     } else {
         response.setStatus(404, "Not Found");
         response.setBody("Route not found");

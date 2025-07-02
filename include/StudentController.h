@@ -5,5 +5,5 @@
 
 class StudentController : public RequestHandler {
 public:
-    void handle(const HttpRequest& httpRequest, HttpResponse& httpResponse) override;
+    void handle(HttpRequest& httpRequest, HttpResponse& httpResponse) override;
 };

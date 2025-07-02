@@ -27,7 +27,7 @@ void StudentController::handle(HttpRequest& httpRequest, HttpResponse& httpRespo
         for (const auto& student : students) {
             oss << "Name: " << student.getName()
             << ", Age: " << student.getAge()
-            << ", Roll: " << student.getRoll()
+            << ", Roll: " << student.getRollNumber()
             << ", Email: " << student.getEmail()
             << ", Address: " << student.getAddress()
             << ", About: " << student.getAbout()
