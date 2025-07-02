@@ -2,7 +2,7 @@
 #include "../include/StudentManager.h"
 #include <sstream>
 
-void StudentController::handle(const HttpRequest& httpRequest, HttpResponse& httpResponse) {
+void StudentController::handle(HttpRequest& httpRequest, HttpResponse& httpResponse) {
     if (httpRequest.getMethod() == "POST") {
         // For simplicity, assume body is "name,age,roll,email,address,about"
         std::istringstream iss(httpRequest.getBody());
