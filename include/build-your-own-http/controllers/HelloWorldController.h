@@ -1,8 +1,8 @@
 #pragma once
 
-#include "RequestHandler.h"
-#include "HttpRequest.h"
-#include "HttpResponse.h"
+#include "build-your-own-http/handlers/RequestHandler.h"
+#include "build-your-own-http/http/HttpRequest.h"
+#include "build-your-own-http/http/HttpResponse.h"
 
 class HelloWorldController: public RequestHandler {
     public:

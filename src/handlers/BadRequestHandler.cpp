@@ -1,6 +1,6 @@
-#include "../include/BadRequestHandler.h"
-#include "../include/HttpRequest.h"
-#include "../include/HttpResponse.h"
+#include "build-your-own-http/handlers/BadRequestHandler.h"
+#include "build-your-own-http/http/HttpRequest.h"
+#include "build-your-own-http/http/HttpResponse.h"
 
 void BadRequestHandler::handle(const HttpRequest&, HttpResponse& httpResponse) {
     httpResponse.setStatus(400, "Bad Request");

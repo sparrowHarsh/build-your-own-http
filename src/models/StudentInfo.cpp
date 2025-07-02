@@ -1,4 +1,4 @@
-#include "../include/StudentInfo.h"
+#include "build-your-own-http/models/StudentInfo.h"
 
 // Constructor with all fields
 StudentInfo::StudentInfo(const std::string& name, int age, const std::string& rollNumber,

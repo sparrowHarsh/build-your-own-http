@@ -1,7 +1,7 @@
 #include <iostream>
-#include "../include/HelloWorldController.h"
-#include "../include/HttpRequest.h"
-#include "../include/HttpResponse.h"
+#include "build-your-own-http/controllers/HelloWorldController.h"
+#include "build-your-own-http/http/HttpRequest.h"
+#include "build-your-own-http/http/HttpResponse.h"
 
 void HelloWorldController::handle(HttpRequest& httpRequest, HttpResponse& httpResponse) {
     std::cout << "Received request for hello world" << std::endl;

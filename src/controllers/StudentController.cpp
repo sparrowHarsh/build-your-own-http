@@ -1,5 +1,5 @@
-#include "../include/StudentController.h"
-#include "../include/StudentManager.h"
+#include "build-your-own-http/controllers/StudentController.h"
+#include "build-your-own-http/models/StudentManager.h"
 #include <sstream>
 
 void StudentController::handle(HttpRequest& httpRequest, HttpResponse& httpResponse) {

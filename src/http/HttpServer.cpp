@@ -6,10 +6,12 @@
 #include <netinet/in.h>
 #include <cstring>
 #include <cerrno>
-#include "../include/ThreadPoolExecuter.h"
-#include "../include/HttpServer.h"
-#include "../include/HttpRequest.h"
-#include "../include/HttpResponse.h"
+#include "build-your-own-http/http/ThreadPoolExecuter.h"
+#include "build-your-own-http/http/HttpServer.h"
+#include "build-your-own-http/http/HttpRequest.h"
+#include "build-your-own-http/http/HttpResponse.h"
+#include "build-your-own-http/handlers/RequestHandler.h"
+#include "build-your-own-http/RouteInfo.h"
 
 HttpServer::HttpServer(int port) : port(port), serverSocket(-1), isRunning(false), threadpool(4) {
     std::cout << "HttpServer created on port " << port << std::endl;

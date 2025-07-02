@@ -1,6 +1,6 @@
-#include "../include/HttpServer.h"
-#include "../include/HelloWorldController.h"
-#include "../include/StudentController.h"
+#include "build-your-own-http/http/HttpServer.h"
+#include "build-your-own-http/controllers/HelloWorldController.h"
+#include "build-your-own-http/controllers/StudentController.h"
 
 int main(){
     int port = 8080;

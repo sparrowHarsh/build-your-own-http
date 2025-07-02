@@ -1,5 +1,6 @@
 #pragma once
-#include "StudentInfo.h"
+
+#include "build-your-own-http/models/StudentInfo.h"
 #include <vector>
 #include <mutex>
 
