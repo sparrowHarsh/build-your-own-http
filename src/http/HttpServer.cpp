@@ -11,7 +11,7 @@
 #include "build-your-own-http/http/HttpRequest.h"
 #include "build-your-own-http/http/HttpResponse.h"
 #include "build-your-own-http/handlers/RequestHandler.h"
-#include "build-your-own-http/RouteInfo.h"
+#include "build-your-own-http/http/RouteInfo.h"
 
 HttpServer::HttpServer(int port) : port(port), serverSocket(-1), isRunning(false), threadpool(4) {
     std::cout << "HttpServer created on port " << port << std::endl;

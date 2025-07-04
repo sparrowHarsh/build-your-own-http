@@ -28,3 +28,15 @@ std::vector<StudentInfo> StudentManager::getStudentByName(std::string& studentNa
     }
     return result;
 }
+
+bool StudentManager::removeStudentByRollNumber(const std::string& rollNumber){
+    std::lock_guard<std::mutex> lock(mtx);
+    auto it = std::remove_if(students.begin(), students.end(),
+        [&](const StudentInfo& s) { return s.getRollNumber() == rollNumber; });
+        
+    if (it != students.end()) {
+        students.erase(it, students.end());
+        return true;
+    }
+    return false;
+}

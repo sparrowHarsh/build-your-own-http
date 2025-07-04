@@ -11,6 +11,7 @@ public:
     void addStudent(const StudentInfo& student);
     std::vector<StudentInfo> getAllStudents() const;
     std::vector<StudentInfo> getStudentByName(std::string& studentName) const;
+    bool removeStudentByRollNumber(const std::string& rollNumber);
 
 private:
     StudentManager() = default;
