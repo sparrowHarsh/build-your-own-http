@@ -10,6 +10,8 @@ int main(){
     server.registerHandler(method, "/hello", new HelloWorldController());
     server.registerHandler(method1, "/student", new StudentController());
     server.registerHandler(method,"/student", new StudentController());
+    method = "DELETE";
+    server.registerHandler(method, "/student", new StudentController());
     
     server.start();
     return 0;
